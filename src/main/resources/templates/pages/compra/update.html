@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="~{fragments/master :: head(title='Usuarios')}">
+  <title th:text="${title}">Titulo</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" type="text/css" href="../../static/css/fonts/boxicons.css" />
+  <link rel="stylesheet" type="text/css" href="../../static/css/core.css" />
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css" />
+  <script src="../../static/js/helpers.js"></script>
+  <script src="../../static/js/config.js"></script>
+</head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <div th:replace="~{fragments/master :: menu(item='Catalogo',subitem='Socios')}">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo" style="padding-top:6px">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <img src="../static/images/recycle-icon.svg" height="32" width="32" th:src="@{/images/recycle-icon.svg}"
+                  alt="logo">
+              </span></a>
+          </div>
+        </aside>
+      </div>
+      <div class="layout-page">
+        <div th:replace="~{fragments/master :: navbar}"></div>
+        <div class="content-wrapper">
+          <div class="container-fluid flex-grow-1 container-p-y">
+            <!--Todo Content here-->
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Catalogos / Compras / </span><span
+                th:text="${titulo}"> Agregar</span></h4>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card mb-4">
+                  <div class="dataTables_wrapper">
+                    <div class="card-header flex-column flex-md-row">
+                      <div class="head-label text-center">
+                        <h5 class="card-title mb-0">Captura los datos</h5>
+                      </div>
+                      <div class="pt-3 pt-md-0">
+                        <a id="exportReport" class="btn btn-primary me-2" th:href="@{/catalogos/compra/single/export/} + ${compra.idCompra}">
+                          <i class="bx bx-export me-sm-1"></i>
+                          <span class="d-none d-sm-inline-block">Exportar</span>
+                        </a>
+                        <a class="btn btn-primary me-2" th:href="@{/catalogos/compra/}">Regresar</a>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="my-0" />
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="mb-3 col-md-5">
+                        <label for="name" class="form-label">Recuperador</label>
+                        <input class="form-control" type="text" disabled th:value="${compra.recuperador}" />
+                      </div>
+                      <div class="mb-3 col-md-5">
+                        <label for="apPaterno" class="form-label">Folio</label>
+                        <input class="form-control" type="text" disabled th:value="${compra.folio}" />
+                      </div>
+                      <div class="mb-3 col-md-5">
+                        <label for="apMaterno" class="form-label">Usuario</label>
+                        <input class="form-control" type="text" disabled th:value="${compra.usuario}" />
+                      </div>
+                      <div class="mb-3 col-md-4">
+                        <label for="email" class="form-label">Sucursal</label>
+                        <input class="form-control" type="text" disabled th:value="${compra.sucursal}" />
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label for="direccion" class="form-label">Total</label>
+                        <input class="form-control" type="text" disabled th:value="${compra.total}" />
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label for="telefono" class="form-label">Fecha</label>
+                        <input class="form-control" type="text" disabled th:value="${compra.fecha}" />
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label for="flete" class="form-label">Flete</label>
+                        <input class="form-control" type="text" disabled th:value="${compra.flete}" />
+                      </div>
+                      <table class="table border-top">
+                        <thead>
+                          <td class="sorting_disabled">Material</td>
+                          <td class="sorting_disabled d-none d-md-table-cell">Peso Bruto</td>
+                          <td class="sorting_disabled d-none d-md-table-cell">Peso Neto</td>
+                          <td class="sorting_disabled d-none d-md-table-cell">Tara</td>
+                          <td class="sorting_disabled d-none d-md-table-cell">Precio</td>
+                          <td class="sorting_disabled d-none d-md-table-cell">Total</td>
+                        </thead>
+                        <tbody>
+                          <tr th:each="detalle: ${detalles}">
+                            <td th:text="${detalle.codigo}"></td>
+                            <td th:text="${detalle.pesoBruto}"></td>
+                            <td th:text="${detalle.pesoNeto}"></td>
+                            <td th:text="${detalle.tara}"></td>
+                            <td th:text="${detalle.precio}"></td>
+                            <td th:text="${detalle.total}"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <br/>
+                      <br/>
+                      <form id="compraform" method="POST">
+                        <div class="mb-3 col-md-6">
+                          <label for="estatus" class="form-label">Estatus</label>
+                          <select id="estatus" name="estatus" class="select2 form-select">
+                            <option value="0">Selecciona estatus</option>
+                            <option value="-1" th:each="estatus : ${estatusCompra}" th:value="${estatus.id}"
+                              th:text="${estatus.nombre}" th:selected="${estatus.id == compra.idEstatus}">Mexico
+                            </option>
+                          </select>
+                        </div>
+                        <div class="mt-2">
+                          <input type="hidden" name="idCompra" th:value="${compra.idCompra}">
+                          <button sec:authorize="hasRole('ROLE_ADMIN')" id="update" type="submit" class="btn btn-primary me-2">Actualizar</button>
+                          <a href="#" type="reset" class="btn btn-outline-secondary"
+                            th:href="@{/catalogos/compra/}">Cancelar</a>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- /Account -->
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- <footer class="content-footer footer bg-footer-theme"> </footer>-->
+          </div>
+        </div>
+      </div>
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <div th:replace="~{fragments/master :: jscript}">
+      <script src="../../static/js/jquery.js"></script>
+      <script src="../../static/js/popper.js"></script>
+      <script src="../../static/js/bootstrap.js"></script>
+      <script src="../../static/js/perfect-scrollbar.js"></script>
+      <script src="../../static/js/menu.js"></script>
+      <script src="../../static/js/main.js"></script>
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </div>
+    <script>var NoobtenerRegistros = true; </script>
+    <script src="../../static/js/compra_modify.js" th:src="@{/js/compra_modify.js}"></script>
+
+</body>
+
+</html>

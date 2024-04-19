@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="~{fragments/master :: head(title='Socios Recuperadores')}"></head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <div th:replace="~{fragments/master :: menu(item='Catalogo',subitem='Socios')}"></div>
+      <div class="layout-page">
+        <div th:replace="~{fragments/master :: navbar}"></div>
+        <div class="content-wrapper">
+          <div class="container-fluid flex-grow-1 container-p-y">
+            <!--Todo Content here-->
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Catalogos /</span> Socios</h4>
+            <div class="card">
+              <div class="container-fluid px-0">
+                <div class="dataTables_wrapper">
+                  <div class="card-header flex-column flex-md-row">
+                    <div class="head-label text-center">
+                      <h5 class="card-title mb-0">Socios</h5>
+                    </div>
+                    <div class="pt-3 pt-md-0">
+                      <a class="btn btn-primary me-2" th:href="@{/catalogos/socio/export}">
+                        <i class="bx bx-export me-sm-1"></i>
+                        <span class="d-none d-sm-inline-block">Exportar</span>
+                      </a>
+                      <a sec:authorize="hasRole('ROLE_ADMIN')"  class="btn btn-primary" th:href="@{/catalogos/socio/add}">
+                        <i class="bx bx-plus me-sm-1"></i>
+                        <span class="d-none d-sm-inline-block">Nuevo Registro</span>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="row mt-3 mb-3 px-3">
+                    <div class="col-sm-12 col-md-6">
+                      <label>Mostrar
+                        <select id="numberRows" class="form-select d-inline w-auto">
+                          <option value="1">1</option>
+                          <option selected value="5">5</option>
+                          <option value="10">10</option>
+                          <option value="50">50</option>
+                        </select> entradas </label>
+                    </div>
+                    <div class="col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end">
+                      <label>Buscar:
+                        <input id="searchUser" type="search" class="form-control mx-2 d-inline w-auto"
+                          placeholder="Ingrese un nombre">
+                      </label>
+                      <button id="searchBtn" class="btn btn-primary ms-1">
+                        <i class="bx bx-search-alt-2"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <table class="table border-top">
+                    <thead>
+                      <tr>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 60%;">Nombre Completo</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 30%;">
+                          Tel&eacute;fono</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 10%;">Editar</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bodyTable" class="border-top-0"></tbody>
+                  </table>
+                  <div class="row mt-3 px-3">
+                    <div class="col-sm-12 col-md-6">
+                      <span id="labelRecords"></span>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                      <ul id="paginator" class="pagination pagination justify-content-end">
+                        <li class="paginate_button page-item previous">
+                          <button class="page-link nondigit" data-direction="previous">
+                            <i class="tf-icon bx bx-chevrons-left"></i>
+                          </button>
+                        </li>
+                        <li class="paginate_button page-item next">
+                          <button class="page-link nondigit" data-direction="next">
+                            <i class="tf-icon bx bx-chevrons-right"></i>
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <footer class="content-footer footer bg-footer-theme"> </footer>-->
+        </div>
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <div th:replace="~{fragments/master :: jscript}">
+    <script src="../../static/js/helpers.js"></script>
+    <script src="../../static/js/config.js"></script>
+    <script src="../../static/js/jquery.js"></script>
+    <script src="../../static/js/popper.js"></script>
+    <script src="../../static/js/bootstrap.js"></script>
+    <script src="../../static/js/perfect-scrollbar.js"></script>
+    <script src="../../static/js/menu.js"></script>
+    <script src="../../static/js/main.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </div>
+  <script src="../../static/js/socio_menu.js" th:src="@{/js/socio_menu.js}"></script>
+</body>
+
+</html>

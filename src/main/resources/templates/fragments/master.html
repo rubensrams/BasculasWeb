@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:fragment="head">
+  <title th:text="${title}">Titulo</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Sitio de mantenimiento para la aplicacion de pesaje">
+  <meta property="og:description" content="Sitio de mantenimiento para la aplicacion de pesaje" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.basculaspetstar.com/" />
+  <meta property="og:title" content="PetStar - Basculas" />
+  <meta property="og:image" th:content="@{/images/logo.png}" />
+  <meta property="og:site_name" content="www.basculaspetstar.mx" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="../../static/css/fonts/boxicons.css"
+    th:href="@{/css/fonts/boxicons.css}" />
+  <link rel="stylesheet" type="text/css" href="../../static/css/core.css" th:href="@{/css/core.css}" />
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:fragment="menu">
+        <div class="app-brand demo pt-2">
+          <a href="#" th:href="@{/}" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <img src="../static/images/logoCompleto.png" height="32" th:src="@{/images/logoCompleto.png}" alt="logo">
+            </span>
+          </a>
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+        <div class="menu-inner-shadow"></div>
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="#" th:href="@{/}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+          <li class="menu-item" th:classappend="${item == 'Catalogo'} ? 'open active' : ''">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-category"></i>
+              <div data-i18n="Layouts">Catalogos</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item" th:classappend="${subitem == 'Usuarios'} ? 'active' : ''">
+                <a href="#" th:href="@{/catalogos/usuario/}" class="menu-link">
+                  <div>Usuarios</div>
+                </a>
+              </li>
+              <li class="menu-item" th:classappend="${subitem == 'Socios'} ? 'active' : ''">
+                <a href="#" th:href="@{/catalogos/socio/}" class="menu-link">
+                  <div>Socios</div>
+                </a>
+              </li>
+              <li sec:authorize="hasRole('ROLE_ADMIN')" class="menu-item"
+                th:classappend="${subitem == 'Materiales'} ? 'active' : ''">
+                <a href="#" th:href="@{/catalogos/material/}" class="menu-link">
+                  <div>Materiales</div>
+                </a>
+              </li>
+              <li sec:authorize="hasRole('ROLE_ADMIN')" class="menu-item"
+                th:classappend="${subitem == 'Sucursales'} ? 'active' : ''">
+                <a href="#" th:href="@{/catalogos/sucursal/}" class="menu-link">
+                  <div>Centro de Acopio</div>
+                </a>
+              </li>
+              <li sec:authorize="hasRole('ROLE_ADMIN')" class="menu-item"
+                th:classappend="${subitem == 'Opciones'} ? 'active' : ''">
+                <a href="#" th:href="@{/catalogos/opciones/}" class="menu-link">
+                  <div>Opciones</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item" th:classappend="${item == 'Compras'} ? 'open active' : ''">
+            <a href="#" th:href="@{/catalogos/compra/}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-search-alt-2"></i>
+              <div data-i18n="Basic">Compras</div>
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <div class="layout-page">
+        <nav
+          class="layout-navbar container-fluid navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar" th:fragment="navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar me-2 avatar-online">
+                    <span class="avatar-initial rounded-circle"
+                      th:classappend="${#authentication.getPrincipal().getColor()}"
+                      th:text="${#authentication.getPrincipal().getInitials()}">JA</span>
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <span class="avatar-initial rounded-circle"
+                              th:classappend="${#authentication.getPrincipal().getColor()}"
+                              th:text="${#authentication.getPrincipal().getInitials()}">JA</span>
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block"
+                            th:text="${#authentication.getPrincipal().getFullName()}">John Doe</span>
+                          <small class="text-muted" th:each="authority : ${#authentication.getAuthorities()}"
+                            th:if="${authority.getAuthority().startsWith('ROLE_')}"
+                            th:text="${authority.getAuthority().replaceFirst('ROLE_', '')}">
+                          </small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <form th:action="@{/logout.html}" method="post" class="dropdown-item">
+                      <i class="bx bx-power-off me-2"></i>
+                      <input style="all:unset" type="submit" class="align-middle" value="Log Out" />
+                    </form>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+        <div class="content-wrapper">
+          <div class="container-fluid flex-grow-1 container-p-y">
+            <!--Todo Content here-->
+            <p>Todo content here...</p>
+          </div>
+          <!-- <footer class="content-footer footer bg-footer-theme"> </footer>-->
+        </div>
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <div th:fragment="jscript">
+    <script src="../../static/js/helpers.js" th:src="@{/js/helpers.js}"></script>
+    <script src="../../static/js/config.js" th:src="@{/js/config.js}"></script>
+    <script src="../../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+    <script src="../../static/js/popper.js" th:src="@{/js/popper.js}"></script>
+    <script src="../../static/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+    <script src="../../static/js/perfect-scrollbar.js" th:src="@{/js/perfect-scrollbar.js}"></script>
+    <script src="../../static/js/menu.js" th:src="@{/js/menu.js}"></script>
+    <script src="../../static/js/main.js" th:src="@{/js/main.js}"></script>
+    <script src="../../static/js/ui-modals.js" th:src="@{/js/ui-modals.js}"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <input type="hidden" id="path" th:value="@{/}">
+  </div>
+</body>
+
+</html>

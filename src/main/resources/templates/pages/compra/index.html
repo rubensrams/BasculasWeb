@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="~{fragments/master :: head(title='Compras')}"></head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <div th:replace="~{fragments/master :: menu(item='Compras',subitem='Compras')}"></div>
+      <div class="layout-page">
+        <div th:replace="~{fragments/master :: navbar}"></div>
+        <div class="content-wrapper">
+          <div class="container-fluid flex-grow-1 container-p-y">
+            <!--Todo Content here-->
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Catalogos /</span> Compras</h4>
+            <div class="card">
+              <div class="container-fluid px-0">
+                <div class="dataTables_wrapper" style="overflow: auto;">
+                  <div class="card-header flex-column flex-md-row">
+                    <div class="head-label text-center">
+                      <h5 class="card-title mb-0">Compras</h5>
+                    </div>
+                    <div class="pt-3 pt-md-0">
+                      <a id="exportReport" class="btn btn-primary me-2" th:href="@{/catalogos/compra/export}">
+                        <i class="bx bx-export me-sm-1"></i>
+                        <span class="d-none d-sm-inline-block">Exportar</span>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="row mt-3 mb-3 px-3">
+                    <div class="col-sm-12">
+                      <label>Mostrar
+                        <select id="numberRows" class="form-select d-inline w-auto">
+                          <option value="1">1</option>
+                          <option selected value="5">5</option>
+                          <option value="10">10</option>
+                          <option value="50">50</option>
+                        </select></label>
+                    </div>
+                  </div>
+                  <div class="row mt-3 mb-3 px-3">
+                    <div class="col-sm-12 d-flex justify-content-center justify-content-md-end">
+                      <label>Inicio:
+                        <input class="form-control d-inline w-auto" type="date" value="" id="fechaIni">
+                      </label>&nbsp;
+                      <label>Fin:
+                        <input class="form-control d-inline w-auto" type="date" value="" id="fechaFin">
+                      </label>&nbsp;&nbsp;
+                      <label>Sucursal:
+                        <select id="sucursal" name="sucursal" class="form-select d-inline w-auto">
+                          <option value="0">Todas</option>
+                          <option value="-1" th:each="sucursal : ${sucursales}" th:value="${sucursal.id}"
+                            th:text="${sucursal.nombre}">Mexico
+                          </option>
+                        </select>
+                      </label>
+                      <label>Buscar:
+                        <input id="abcsSearch" type="search" class="form-control mx-2 d-inline w-auto">
+                      </label>
+                      <button id="searchBtn" class="btn btn-primary ms-1">
+                        <i class="bx bx-search-alt-2"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <table class="table border-top" style="min-width:1200px">
+                    <thead>
+                      <tr>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 5%;">Cons</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 15%;">
+                          Fecha</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 20%;">
+                          Usuario</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 20%;">
+                          Recuperador</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 10%;">
+                          Sucursal</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 10%;">
+                          Flete</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 10%;">
+                          Material</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 10%;">
+                          Peso Neto</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 10%;">
+                          Precio</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 10%;">
+                          Total</th>
+                        <th class="sorting_disabled d-none d-md-table-cell" rowspan="1" colspan="1" style="width: 10%;">
+                          Estatus</th>
+                        <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 10%;">Detalle</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bodyTable" class="border-top-0"></tbody>
+                  </table>
+                  <div class="row mt-3 px-3">
+                    <div class="col-sm-12 col-md-6">
+                      <span id="labelRecords"></span>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                      <ul id="paginator" class="pagination pagination justify-content-end">
+                        <li class="paginate_button page-item previous">
+                          <button class="page-link nondigit" data-direction="previous">
+                            <i class="tf-icon bx bx-chevrons-left"></i>
+                          </button>
+                        </li>
+                        <li class="paginate_button page-item next">
+                          <button class="page-link nondigit" data-direction="next">
+                            <i class="tf-icon bx bx-chevrons-right"></i>
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <footer class="content-footer footer bg-footer-theme"> </footer>-->
+        </div>
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <div th:replace="~{fragments/master :: jscript}">
+    <script src="../../static/js/helpers.js"></script>
+    <script src="../../static/js/config.js"></script>
+    <script src="../../static/js/jquery.js"></script>
+    <script src="../../static/js/popper.js"></script>
+    <script src="../../static/js/bootstrap.js"></script>
+    <script src="../../static/js/perfect-scrollbar.js"></script>
+    <script src="../../static/js/menu.js"></script>
+    <script src="../../static/js/main.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </div>
+  <script src="../../static/js/compra_menu.js" th:src="@{/js/compra_menu.js}"></script>
+</body>
+
+</html>

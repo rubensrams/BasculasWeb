@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="~{fragments/master :: head(title='Usuarios')}">
+  <title th:text="${title}">Titulo</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" type="text/css" href="../../static/css/fonts/boxicons.css" />
+  <link rel="stylesheet" type="text/css" href="../../static/css/core.css" />
+  <link rel="stylesheet" type="text/css" href="../../static/css/style.css" />
+  <script src="../../static/js/helpers.js"></script>
+  <script src="../../static/js/config.js"></script>
+</head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <div th:replace="~{fragments/master :: menu(item='Catalogo',subitem='Usuarios')}">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo" style="padding-top:6px">
+            <a href="index.html" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <img src="../static/images/recycle-icon.svg" height="32" width="32" th:src="@{/images/recycle-icon.svg}"
+                  alt="logo">
+              </span></a>
+          </div>
+        </aside>
+      </div>
+      <div class="layout-page">
+        <div th:replace="~{fragments/master :: navbar}"></div>
+        <div class="content-wrapper">
+          <div class="container-fluid flex-grow-1 container-p-y">
+            <!--Todo Content here-->
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Catalogos / Usuarios / </span><span
+                th:text="${titulo}"> Agregar</span></h4>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card mb-4">
+                  <div class="dataTables_wrapper">
+                    <div class="card-header flex-column flex-md-row">
+                      <div class="head-label text-center">
+                        <h5 class="card-title mb-0">Captura los datos</h5>
+                      </div>
+                      <div class="pt-3 pt-md-0">
+                        <a class="btn btn-primary me-2" th:href="@{/catalogos/usuario/}">Regresar</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body" th:style="${titulo == 'Actualizar' ? 'display:block' : 'display:none'}">
+                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                      <img src="https://static.thenounproject.com/png/363640-200.png"
+                        th:src="${#strings.isEmpty(user.avatar) ? '/images/uploads/icondefault' : user.avatar}"
+                        alt="user-avatar" class="d-block rounded" height="100" width="100">
+                      <div class="button-wraper">
+                        <form action="#" th:action="@{/catalogos/usuario/upload}" enctype="multipart/form-data"
+                          method="post">
+                          <label for="image" class="btn btn-primary me-2 mb-4" tabindex="0">
+                            <span class="d-none d-sm-block">Seleccionar foto</span>
+                            <i class="bx bx-upload d-block d-sm-none"></i>
+                            <input type="file" id="image" name="image" class="account-file-input" hidden=""
+                              accept="image/png, image/jpeg">
+                          </label>
+                          <input type="submit" value="Agregar" id="uploadPhoto" disabled
+                            class="btn btn-outline-secondary account-image-reset mb-4">
+                          <input type="hidden" name="idUser" th:value="${user.id}">
+                          <span th:if="${msg != null}" th:text="${msg}"></span>
+                        </form>
+                        <p class="text-muted mb-0">Solo im&aacute;genes JPG, GIF or PNG. M&aacute;ximo 300K</p>
+                      </div>
+                    
+                    </div>
+                  </div>
+                  <hr class="my-0" />
+                  <div class="card-body">
+                    <form id="userform" method="POST">
+                      <div class="row">
+                        <div class="mb-3 col-md-2">
+                          <label for="username" class="form-label">Username</label>
+                          <input class="form-control" type="text" id="username" name="username"
+                            th:value="${user.username}" maxlength="8" />
+                          <span class="invalid-data-hidden"> M&iacute;nimo 3 caracteres </span>
+                        </div>
+                        <div class="mb-3 col-md-5">
+                          <label for="name" class="form-label">Nombre</label>
+                          <input class="form-control" type="text" id="name" name="name" maxlength="60"  th:value="${user.name}" />
+                          <span class="invalid-data-hidden"> Ingresa un nombre correcto </span>
+                        </div>
+                        <div class="mb-3 col-md-5">
+                          <label for="lastName" class="form-label">Apellidos</label>
+                          <input class="form-control" type="text" name="lastName" id="lastName"
+                            th:value="${user.lastName}" maxlength="120" />
+                          <span class="invalid-data-hidden"> Ingresa al menos un apellido </span>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                          <label for="email" class="form-label">E-mail</label>
+                          <input class="form-control" type="text" id="email" name="email" value="" maxlength="60" 
+                            placeholder="ejemplo@servidor.com" th:value="${user.email}" />
+                          <span class="invalid-data-hidden"> Ingresa un email valido </span>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                          <label for="rfc" class="form-label">RFC</label>
+                          <input class="form-control" type="text" id="rfc" name="rfc" value="" maxlength="15" 
+                            placeholder="XAXX010101AAA" th:value="${user.rfc}" />
+                          <span class="invalid-data-hidden"> Ingresa un rfc v&aacute;lido</span>
+                        </div>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                          <label for="rol" class="form-label">Rol</label>
+                          <select id="rol" name="rol" class="select2 form-select">
+                            <option value="0">Selecciona Rol</option>
+                            <option value="-1" th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"
+                              th:selected="${rol.nombre==user.rol}">
+                              Administrador</option>
+                          </select>
+                          <span class="invalid-data-hidden"> Selecciona un rol </span>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                          <label for="state" class="form-label">Estado</label>
+                          <input class="form-control" type="text" id="state" name="state" value="" placeholder="" maxlength="60" 
+                            th:value="${user.state}" />
+                          <span class="invalid-data-hidden"> Ingresa un estado </span>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                          <label for="email" class="form-label">Sucursal</label>
+                          <select id="sucursal" name="sucursal" class="select2 form-select">
+                            <option value="0">Selecciona Sucursal</option>
+                            <option value="-1" th:each="sucursal : ${sucursales}" th:value="${sucursal.id}"
+                              th:text="${sucursal.nombre}" th:selected="${sucursal.nombre == user.sucursal}">Mexico
+                            </option>
+                          </select>
+                          <span class="invalid-data-hidden"> Selecciona una sucursal </span>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                          <label for="" class="form-label">Habilitado/Deshabilitado</label>
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" name="enabled" type="checkbox" style="height: 28px;
+                            width: 48px;" th:checked="${user.enabled}">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mt-2">
+                        <input type="hidden" name="id" th:value="${user.id}">
+                        <button sec:authorize="hasRole('ROLE_ADMIN')" id="update" type="submit" class="btn btn-primary me-2">Actualizar</button>
+                        <a href="#" type="reset" class="btn btn-outline-secondary"
+                          th:href="@{/catalogos/usuario/}">Cancelar</a>
+                      </div>
+                    </form>
+                  </div>
+                  <div id="success" class="alert alert-warning d-none" role="alert">
+                    Los cambios se han guardado correctamente.
+                  </div>
+                  <!-- /Account -->
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!-- <footer class="content-footer footer bg-footer-theme"> </footer>-->
+        </div>
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <div th:replace="~{fragments/master :: jscript}">
+    <script src="../../static/js/jquery.js"></script>
+    <script src="../../static/js/popper.js"></script>
+    <script src="../../static/js/bootstrap.js"></script>
+    <script src="../../static/js/perfect-scrollbar.js"></script>
+    <script src="../../static/js/menu.js"></script>
+    <script src="../../static/js/main.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </div>
+  <script>var NoobtenerRegistros = true; </script>
+  <script src="../../static/js/user_modify.js" th:src="@{/js/user_modify.js}"></script>
+
+</body>
+
+</html>

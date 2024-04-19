@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="~{fragments/master :: head(title='Precios de materiales')}"></head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <div th:replace="~{fragments/master :: menu(item='Catalogo',subitem='Materiales')}"></div>
+      <div class="layout-page">
+        <div th:replace="~{fragments/master :: navbar}"></div>
+        <div class="content-wrapper">
+          <div class="container-fluid flex-grow-1 container-p-y">
+            <!--Todo Content here-->
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Catalogos /</span> Materiales</h4>
+            <div class="card">
+              <div class="dataTables_wrapper">
+                <div class="card-header flex-column flex-md-row">
+                  <div class="head-label text-center">
+                    <button id="nuevo" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                      <i class="bx bx-plus me-sm-1"></i>
+                      <span class="d-none d-sm-inline-block">Nuevo Registro</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title mb-3">Modificar precio</h5>
+                <form id="materialForm" method="post">
+                  <div class="row">
+                    <div class="mb-3 col-md-3">
+                      <label for="email" class="form-label">Material</label>
+                      <select id="material" name="material" class="select2 form-select">
+                        <option value="0">Selecciona Material</option>
+                        <option value="-1" th:each="material : ${materiales}" th:value="${material.idMaterial}"
+                          th:text="${material.code}">PMOXSD
+                        </option>
+                      </select>
+                      <span class="invalid-data-hidden"> Selecciona un material </span>
+                    </div>
+                    <div class="mb-3 col-md-2">
+                      <label for="precio" class="form-label">Precio</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="basic-addon11">$</span>
+                        <input id="precio" name="precio" type="number" step=".01" min="0" class="form-control"
+                          placeholder="0.00" aria-label="precio" aria-describedby="basic-precio"
+                          onkeypress="return isNumberKey(event)">
+                        <span class="invalid-data-hidden"> Ingresa un numero válido </span>
+                      </div>
+                    </div>
+                    <div class="mb-3 col-12">
+                      <button id="update" class="btn btn-primary me-2">Modificar</button>
+                    </div>
+                  </div>
+                  <div id="mensaje" class="alert alert-warning d-none" role="alert">Cambios realizados exitosamente
+                  </div>
+                </form>
+              </div>
+              <div class="card-body">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <tr th:each="material : ${materiales}">
+                      <td th:text="${material.code}"></td>
+                      <td th:id="'pr_'+${material.idMaterial}"
+                        th:text="${'$' + #numbers.formatDecimal(material.price, 0, 'COMMA', 2, 'POINT')}">
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- <footer class="content-footer footer bg-footer-theme"> </footer>-->
+        </div>
+        <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Nuevo Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col mb-3">
+                    <label for="changePass" class="form-label">Password</label>
+                    <input type="password" id="changePass" class="form-control" placeholder="***">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col mb-3 form-password-toggle">
+                    <div class="d-flex justify-content-between">
+                      <label class="form-label" for="repeatPass">Confirma Password</label>
+                    </div>
+                    <div class="input-group input-group-merge">
+                      <input type="password" id="repeatPass" name="repeatPass" aria-describedby="password"
+                        class="form-control" placeholder="***">
+                      <input type="hidden" id="currentId" name="currentId">
+                      <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                    </div>
+                  </div>
+                  <span id="passInvalid" class="invalid-data-hidden"></span>
+                </div>
+              </div>|
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  Cancelar
+                </button>
+                <button id="SavePass" type="button" class="btn btn-primary">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="modalProducto" tabindex="-1" style="display: none;" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Agrega un Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row g-2">
+                  <div class="col mb-0">
+                    <label for="codigo" class="form-label">Codigo</label>
+                    <input type="text" id="codigoNuevo" class="form-control" placeholder="xxxxx">
+                  </div>
+                  <div class="col mb-0">
+                    <label for="precioNuevo" class="form-label">Precio</label>
+                    <input id="precioNuevo" class="form-control" type="number" step=".01" min="0" placeholder="0.00"
+                      onkeypress="return isNumberKey(event)">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
+                <button id="saveMaterial" type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <div th:replace="~{fragments/master :: jscript}">
+    <script src="../../static/js/helpers.js"></script>
+    <script src="../../static/js/config.js"></script>
+    <script src="../../static/js/jquery.js"></script>
+    <script src="../../static/js/popper.js"></script>
+    <script src="../../static/js/bootstrap.js"></script>
+    <script src="../../static/js/perfect-scrollbar.js"></script>
+    <script src="../../static/js/menu.js"></script>
+    <script src="../../static/js/main.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </div>
+
+  <script>
+
+    const formatCurrency = (num, decimals) => num.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+    $("#update").on("click", function (e) {
+      $("#mensaje").addClass("d-none");
+      if (validForm()) {
+        $.post($("#path").val() + "catalogos/material/update", $("#materialForm").serialize())
+          .done(function (data) {
+            if (data) {
+              //window.location.href = $("#path").val() + "catalogos/usuario/";
+              $("#pr_" + $("#material").val()).html("$" + formatCurrency(parseFloat($("#precio").val()), 2));
+              $("#mensaje").removeClass("d-none");
+            } else {
+              alert("ocurrio un error")
+            }
+            e.preventDefault();
+          }).fail(function (xhr, status, error) {
+            alert(status);
+          });
+      }
+      e.preventDefault();
+    });
+
+    function validForm() {
+      var resultado = true;
+
+      if ($("#material").val() == 0) {
+        $("#material").addClass("invalid-data").next().addClass("invalid-data-labl");
+        resultado = false;
+      } else {
+        $("#material").removeClass("invalid-data").next().removeClass("invalid-data-labl")
+      }
+      if (!(/^\d+(\.\d+)?$/).test($("#precio").val())) {
+        $("#precio").addClass("invalid-data").next().addClass("invalid-data-labl");
+        resultado = false;
+      }
+      else {
+        $("#precio").removeClass("invalid-data").next().removeClass("invalid-data-labl")
+      }
+      return resultado;
+
+    }
+
+    function isNumberKey(evt) {
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+      return true;
+    }
+
+    $("#saveMaterial").on("click", function () {
+      $.post($("#path").val() + "catalogos/material/insert", { nombre: $("#codigoNuevo").val(), precio: $("#precioNuevo").val() })
+        .done(function (data) {
+          if (data) {
+            window.location.reload();
+          }
+        });
+    })
+  </script>
+
+</body>
+
+</html>

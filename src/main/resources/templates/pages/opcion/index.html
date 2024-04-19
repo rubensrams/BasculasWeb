@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head th:replace="~{fragments/master :: head(title='Precios de materiales')}"></head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <div th:replace="~{fragments/master :: menu(item='Catalogo',subitem='Opciones')}"></div>
+      <div class="layout-page">
+        <div th:replace="~{fragments/master :: navbar}"></div>
+        <div class="content-wrapper">
+          <div class="container-fluid flex-grow-1 container-p-y">
+            <!--Todo Content here-->
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Catalogos /</span> Opciones</h4>
+
+            <div class="row mb-5">
+              <div class="col-md-6 col-lg-4">
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Precio y Logo</h5>
+                    <span class="card-text">Activa o desactiva el precio y el logo en el ticket</span>
+                    <hr />
+                    <div class="form-check form-switch">
+                      <input id="switchLogo" class="form-check-input" name="switchLogo" type="checkbox">
+                      <label class="form-check-label" for="switchLogo"></label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- <footer class="content-footer footer bg-footer-theme"> </footer>-->
+        </div>
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <div th:replace="~{fragments/master :: jscript}">
+    <script src="../../static/js/helpers.js"></script>
+    <script src="../../static/js/config.js"></script>
+    <script src="../../static/js/jquery.js"></script>
+    <script src="../../static/js/popper.js"></script>
+    <script src="../../static/js/bootstrap.js"></script>
+    <script src="../../static/js/perfect-scrollbar.js"></script>
+    <script src="../../static/js/menu.js"></script>
+    <script src="../../static/js/main.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </div>
+  <script>
+
+    $.get($("#path").val() + "catalogos/opciones/ticket_logo")
+      .done(function (data) {
+        $("#switchLogo").prop('checked', data);
+        $("#switchLogo").next().text(data ? "activado" : "desactivado");
+      });
+
+    $("#switchLogo").on("change", function () {
+      $.post($("#path").val() + "catalogos/opciones/ticket_logo", { valor: $("#switchLogo").is(':checked')})
+        .done(function (data) {
+         if(data){
+          $("#switchLogo").next().text($("#switchLogo").is(':checked') ? "activado" : "desactivado");
+         }
+        });
+    });
+  </script>
+</body>
+
+</html>
