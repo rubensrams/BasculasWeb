@@ -10,6 +10,7 @@ public class CustomUserDetails extends User {
     private String fullName;
     private String initials;
     private String color;
+    private String photo;
 
     public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
@@ -37,6 +38,14 @@ public class CustomUserDetails extends User {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
     
 }

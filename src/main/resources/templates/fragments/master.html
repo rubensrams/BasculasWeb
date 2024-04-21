@@ -102,9 +102,12 @@
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                   <div class="avatar me-2 avatar-online">
-                    <span class="avatar-initial rounded-circle"
+                    <img th:if="${not #strings.isEmpty(#authentication.getPrincipal().getPhoto())}" alt="u"
+                      th:src="${#authentication.getPrincipal().getPhoto()}" class="w-px-40 rounded-circle">
+                    <span th:unless="${not #strings.isEmpty(#authentication.getPrincipal().getPhoto())}"
+                      class="avatar-initial rounded-circle"
                       th:classappend="${#authentication.getPrincipal().getColor()}"
-                      th:text="${#authentication.getPrincipal().getInitials()}">JA</span>
+                      th:text="${#authentication.getPrincipal().getInitials()}">XX</span>
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
@@ -113,9 +116,12 @@
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                           <div class="avatar avatar-online">
-                            <span class="avatar-initial rounded-circle"
+                            <img th:if="${not #strings.isEmpty(#authentication.getPrincipal().getPhoto())}" alt="u"
+                              th:src="${#authentication.getPrincipal().getPhoto()}" class="w-px-40 rounded-circle">
+                            <span th:unless="${not #strings.isEmpty(#authentication.getPrincipal().getPhoto())}"
+                              class="avatar-initial rounded-circle"
                               th:classappend="${#authentication.getPrincipal().getColor()}"
-                              th:text="${#authentication.getPrincipal().getInitials()}">JA</span>
+                              th:text="${#authentication.getPrincipal().getInitials()}">XX</span>
                           </div>
                         </div>
                         <div class="flex-grow-1">

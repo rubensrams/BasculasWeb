@@ -31,6 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             customUser.setFullName(user.getName());
             customUser.setInitials((user.getName().substring(0, 1) + user.getLastName().substring(0, 1)).toUpperCase());
             customUser.setColor(user.getColor());
+            customUser.setPhoto(user.getAvatar() == null ? "" : user.getAvatar().trim());
             return customUser;
         } else {
             throw new UsernameNotFoundException("usuario y/o password incorrectos");
